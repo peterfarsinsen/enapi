@@ -1,0 +1,16 @@
+{
+    "name": "pf/enapi",
+    "description": "Energi Nord API",
+    "authors": [
+        {
+            "name": "Peter Farsinsen",
+            "email": "peter@farsinsen.dk"
+        }
+    ],
+    "require": {
+        "symfony/console": "2.4.*@dev"
+    },
+    "autoload": {
+        "psr-0" : {"PF" : "src/"}
+    }
+}
