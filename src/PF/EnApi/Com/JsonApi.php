@@ -4,6 +4,7 @@ namespace PF\EnApi\Com;
 class JsonApi {
 	private $customerNo = null;
 	private $pin = null;
+	private $resolution = 2; // Default to day
 	private $getUserTokenResponse = null;
 	private $getCustomerResponse = null;
 
@@ -51,11 +52,21 @@ class JsonApi {
 			 */
 			'2013-01-01T00%3A00%3A00', # start date
 			'2013-12-31T00%3A00%3A00', # end date
-			2, # Resolution 1: hours, 2: days, 3: months, 4: years
+			$this->getResolution(), # Resolution 1: hours, 2: days, 3: months, 4: years
 			$this->getDc()
 		);
 
 		return $this->doRequest($url);
+	}
+
+	public function setResolution($resolution)
+	{
+		$this->resolution = $resolution;
+	}
+
+	public function getResolution()
+	{
+		return $this->resolution;
 	}
 
 	private function getConsumerNo()

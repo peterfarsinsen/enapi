@@ -12,7 +12,7 @@ class Consumption extends Command
     protected function configure()
     {
         $this
-            ->setName('en:comsumption')
+            ->setName('en:consumption')
             ->setDescription('Get consumption values')
             ->addArgument(
                 'customerNo',
@@ -26,9 +26,9 @@ class Consumption extends Command
             )
             ->addOption(
                'resolution',
-               null,
-               InputOption::VALUE_NONE,
-               'If set, the task will yell in uppercase letters'
+               'day',
+               InputArgument::OPTIONAL,
+               'Show comsumption by hour, day, month or year?'
             )
         ;
     }
@@ -38,10 +38,18 @@ class Consumption extends Command
         $customerNo = $input->getArgument('customerNo');
         $pin = $input->getArgument('pin');
 
-        $cc = new \PF\EnApi\Com\JsonApi($customerNo, $pin);
+        $resolutions = array(
+            'hour' => 1,
+            'day' => 2,
+            'month' => 3,
+            'year' => 4
+        );
 
-        foreach($cc->getConsumption() as $entry) {
-            var_dump($entry);
+        $cc = new \PF\EnApi\Com\JsonApi($customerNo, $pin);
+        $response = $cc->getConsumption();
+
+        foreach($response->HentForbrugResult->ReturnData as $entry) {
+            print date('Y-m-d', substr($entry->Key, 6, 10)) . ' : ' . $entry->Value . ' kwh' . PHP_EOL;
         }
     }
 }
