@@ -26,9 +26,10 @@ class Consumption extends Command
             )
             ->addOption(
                'resolution',
-               'day',
+               null,
                InputArgument::OPTIONAL,
-               'Show comsumption by hour, day, month or year?'
+               'Show comsumption by hour, day, month or year?',
+               'day'
             )
         ;
     }
@@ -45,7 +46,14 @@ class Consumption extends Command
             'year' => 4
         );
 
+        if(!array_key_exists($input->getOption('resolution'), $resolutions)) {
+            throw new \Exception(sprintf('Unknown resolution %s', $resolution));
+        }
+
+        $resolution = $resolutions[$input->getOption('resolution')];
+
         $cc = new \PF\EnApi\Com\JsonApi($customerNo, $pin);
+        $cc->setResolution($resolution);
         $response = $cc->getConsumption();
 
         foreach($response->HentForbrugResult->ReturnData as $entry) {
